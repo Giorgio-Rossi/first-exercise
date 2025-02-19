@@ -3,15 +3,18 @@ import { ButtonConfig } from './button/button-config.interface';
 import { ButtonComponent } from "./button/button.component";
 import { TableConfig } from './table/table-config.interface';
 import { TableComponent } from "./table/table.component";
+import { FormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-root',
-  imports: [TableComponent, ButtonComponent],
+  imports: [TableComponent, ButtonComponent, FormsModule],
   templateUrl: './app.component.html'
 })
 
 export class AppComponent {
     title = 'First exercise'
+    filter: { [key: string]: string } = {}; // Oggetto per i filtri
 
     buttonConfig: ButtonConfig = {
       label: 'Click',
@@ -26,14 +29,15 @@ export class AppComponent {
 
     tableConfig: TableConfig = {
       headers: [
-        { key: 'id', columnName: 'ID', type: 'Number', ordinable: true},
-        { key: 'nome', columnName: 'Nome', type: 'String', ordinable: true},
-        { key: 'eta', columnName: 'Età', type: 'Number', ordinable: true},
-        { key: 'dataNascita', columnName: 'Data di Nascita', type: 'Date', ordinable: false}
+        { key: 'id', columnName: 'ID', type: 'Number', ordinable: true, filtrable: true},
+        { key: 'nome', columnName: 'Nome', type: 'String', ordinable: true,  filtrable: true},
+        { key: 'eta', columnName: 'Età', type: 'Number', ordinable: true,  filtrable: false},
+        { key: 'dataNascita', columnName: 'Data di Nascita', type: 'Date', ordinable: false,  filtrable: false}
       ],
       currentByDefault: {key: 'id', orderby: 'asc'}, // setto l'ordinamento di default
-      pagination:{itemsPerPage: 10, currentPage: 1}
+      pagination:{itemsPerPage: 10, currentPage: 1},
     };
+
 
     data = [
       { id: 1, nome: 'Mario Rossi', eta: 30, dataNascita: '1993-05-15', ordinable: true },

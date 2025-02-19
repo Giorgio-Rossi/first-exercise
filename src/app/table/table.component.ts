@@ -1,14 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { OrderBy, PaginationConfig, TableConfig } from './table-config.interface';
-import { NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf, } from '@angular/common';
 import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PaginationPipe } from "../pagination.pipe";
+import {FormsModule} from  '@angular/forms';
 
 @Component({
   selector: 'app-table',
-  imports: [NgFor, NgIf, FontAwesomeModule, PaginationPipe],
+  imports: [NgFor, NgIf, FontAwesomeModule, PaginationPipe, FormsModule],
   templateUrl: './table.component.html',
   styleUrl: './table.component.css'
 })
@@ -34,6 +35,25 @@ export class TableComponent implements OnInit{
         this.currentPagination = this.config.pagination;
         this.currentPage = this.config.pagination.currentPage || 1;
       }
+    }
+
+    // Applico i filtri
+    doFilter(): any[]{
+      if(!this.data) return [];
+      return this.data.filter(riga => {
+        return Object.keys(this.filter).every(key => {
+          if(!riga[key]) return false;
+          const valoreFiltro = this.filter[key].toLowerCase();
+          const valoreRiga = riga[key].toString().toLowerCase();
+          return valoreRiga.includes(valoreFiltro);
+        });
+      });
+    }
+
+    onFilterChange(key: string, value: any): void{
+      console.log(key, value);
+      this.filter[key] = value?.target?.value;
+      this.currentPage = 1; // La imposto come corrente dopo il filtraggio
     }
 
     // Al click della colonna verifico se posso e come ordinarla
@@ -96,17 +116,5 @@ export class TableComponent implements OnInit{
     getPage(): number[]{
       const numberPage = this.getNumberPage();
       return Array.from({length: numberPage}, (_, i) => i + 1);
-      }
-
-    /* spostato in pagination.pipe
-    getDataForPagination():any[]{
-      if(!this.currentPagination?.itemsPerPage) return this.data;
-
-      const startIndex = (this.currentPage - 1) * this.currentPagination.itemsPerPage;
-      const endIndex = startIndex + this.currentPagination.itemsPerPage;
-
-      return this.data.sliceI(startIndex, endIndex)
-    }
-   */
-    
+      }    
   }
