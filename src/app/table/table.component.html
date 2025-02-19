@@ -10,10 +10,20 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let riga of data">
+      <tr *ngFor="let riga of data | pagination: currentPage : (currentPagination ? currentPagination.itemsPerPage: 10)"> <!-- setto l'attributo a 10 elementi se è null-->
         <td *ngFor="let column of config?.headers">
           {{ riga[column.key] }}
         </td>
       </tr>
     </tbody>
   </table>
+
+
+  <!--- Sezione paginazione -->
+  <div class="pagination">
+    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">Precendente</button>
+    <span *ngFor="let page of getPage()" (click)="changePage(page)" [class.active]="page === currentPage">
+      {{ page }}
+    </span>
+    <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === getNumberPage()">Successivo</button>
+  </div>

@@ -4,10 +4,11 @@ import { NgFor, NgIf } from '@angular/common';
 import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { PaginationPipe } from "../pagination.pipe";
 
 @Component({
   selector: 'app-table',
-  imports: [NgFor, NgIf,FontAwesomeModule],
+  imports: [NgFor, NgIf, FontAwesomeModule, PaginationPipe],
   templateUrl: './table.component.html',
   styleUrl: './table.component.css'
 })
@@ -17,7 +18,7 @@ export class TableComponent implements OnInit{
     @Input() data: any[] = []; 
 
     currentOrderby: OrderBy | undefined;
-    currentPagination: PaginationConfig | undefined;
+    currentPagination: PaginationConfig = {itemsPerPage: 10, currentPage: 1};
     currentPage: number = 1;
     filter: {[key: string]: string} = {} // Oggetto per tenere salvati i filtri 
 
@@ -45,6 +46,7 @@ export class TableComponent implements OnInit{
       if(this.currentOrderby?.key === column){
         this.currentOrderby.orderby =this.currentOrderby.orderby === 'asc' ? 'desc' : 'asc';
       }
+
       // Se non è ancora stata ordinata, la ordino in maniera crescente
       else {
         this.currentOrderby = {key: column, orderby: 'asc'}
@@ -83,11 +85,10 @@ export class TableComponent implements OnInit{
       if(page < 1 || page > this.getNumberPage()) return;
       this.currentPage = page;    
     }
-    
-
+  
     // Numero totale della pagine
     getNumberPage(){
-      if(!this.currentPagination?.itemsPerPage) return 1;
+    if(!this.currentPagination?.itemsPerPage) return 1;
       return Math.ceil(this.data.length / this.currentPagination.itemsPerPage);
     }
     
@@ -96,5 +97,16 @@ export class TableComponent implements OnInit{
       const numberPage = this.getNumberPage();
       return Array.from({length: numberPage}, (_, i) => i + 1);
       }
+
+    /* spostato in pagination.pipe
+    getDataForPagination():any[]{
+      if(!this.currentPagination?.itemsPerPage) return this.data;
+
+      const startIndex = (this.currentPage - 1) * this.currentPagination.itemsPerPage;
+      const endIndex = startIndex + this.currentPagination.itemsPerPage;
+
+      return this.data.sliceI(startIndex, endIndex)
+    }
+   */
     
   }

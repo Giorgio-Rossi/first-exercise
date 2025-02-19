@@ -9,7 +9,7 @@ export interface ColumnConfig{
     columnName: string;
     type: 'String' | 'Number' | 'Date';
     ordinable?: boolean; // Indica se la tabella è ordinabile
-    filtrale?: boolean; // Indica se la tabella è filtrabile o meno
+    filtrable?: boolean; // Indica se la tabella è filtrabile o meno
 }
 
 export interface OrderBy{

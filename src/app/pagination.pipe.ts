@@ -7,7 +7,7 @@ export class PaginationPipe implements PipeTransform {
 
   transform(value: any[], currentPage: number, itemsPerPage: number): any[] {
     // Se non è configurata restituisco tutti gli elementi
-    if(!value || !currentPage || !itemsPerPage){
+    if(!value || !currentPage || !itemsPerPage  || itemsPerPage === undefined){
       return value;
     }
 
