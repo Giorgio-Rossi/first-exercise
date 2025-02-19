@@ -1,3 +1,6 @@
+
+<button *ngIf="actionsConfig.create" (click)="onCreate()">Aggiungi</button>
+
 <table>
     <thead>
       <tr>
@@ -6,7 +9,7 @@
           <fa-icon *ngIf="column.ordinable"
           [icon]="getIconOrderedBy(column.key)"
           class="sort-icon"></fa-icon>
-
+            
           <input
             *ngIf="column.filtrable"
             type="text"
@@ -15,19 +18,22 @@
             (click)="$event.stopPropagation()"
             placeholder="Filtra {{ column.columnName }}"
           />
-
         </th>
+        <th *ngIf="actionsConfig.edit || actionsConfig.delete">Azioni</th>
       </tr>
     </thead>
+
     <tbody>
       <tr *ngFor="let riga of doFilter() | pagination: currentPage : (currentPagination ? currentPagination.itemsPerPage: 10)"> <!-- setto l'attributo a 10 elementi se è null-->
         <td *ngFor="let column of config?.headers">
           {{ riga[column.key] }}
         </td>
+        <td *ngIf="actionsConfig.edit || actionsConfig.delete">
+          <button *ngIf="actionsConfig.edit" (click)="onEdit(riga)">Modifica</button>
+          <button *ngIf="actionsConfig.delete" (click)="onDelete(riga)">Elimina</button>
       </tr>
     </tbody>
-  </table>
-
+</table>
 
   <!--- Sezione paginazione -->
   <div class="pagination">

@@ -2,6 +2,7 @@ export interface TableConfig {
     headers: ColumnConfig[]
     currentByDefault: OrderBy | undefined;
     pagination: PaginationConfig;
+    actions?: actionsConfig;
 };
 
 export interface ColumnConfig{
@@ -18,6 +19,12 @@ export interface OrderBy{
 }
 
 export interface PaginationConfig{
-    itemsPerPage: number; // Limite di elementi per pagina
-    currentPage: number; // Pagina corrente
+    itemsPerPage: number;
+    currentPage: number; 
+}
+
+export interface actionsConfig{
+    create?: boolean;
+    edit?: boolean;
+    delete?: boolean;
 }

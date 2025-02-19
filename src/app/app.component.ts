@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import { ButtonConfig } from './button/button-config.interface';
 import { ButtonComponent } from "./button/button.component";
-import { TableConfig } from './table/table-config.interface';
+import { TableConfig, actionsConfig } from './table/table-config.interface';
 import { TableComponent } from "./table/table.component";
 import { FormsModule } from '@angular/forms';
 
 
+
 @Component({
   selector: 'app-root',
-  imports: [TableComponent, ButtonComponent, FormsModule],
+  imports: [TableComponent, ButtonComponent, FormsModule, ],
   templateUrl: './app.component.html'
 })
 
@@ -28,6 +29,11 @@ export class AppComponent {
     };
 
     tableConfig: TableConfig = {
+      actions: {
+        create: true,
+        edit: true,
+        delete: true
+      },
       headers: [
         { key: 'id', columnName: 'ID', type: 'Number', ordinable: true, filtrable: true},
         { key: 'nome', columnName: 'Nome', type: 'String', ordinable: true,  filtrable: true},
@@ -36,6 +42,7 @@ export class AppComponent {
       ],
       currentByDefault: {key: 'id', orderby: 'asc'}, // setto l'ordinamento di default
       pagination:{itemsPerPage: 10, currentPage: 1},
+  
     };
 
 
@@ -92,4 +99,20 @@ export class AppComponent {
       { id: 50, nome: 'Rita Neri', eta: 27, dataNascita: '1996-03-05', ordinable: false }
     ];
     
+
+
+  // Creazione di un nuovo dato
+  onCreate(): void {
+    console.log("Operazione di create ricevuta");
+  }
+
+  // Modifica di un dato esistente
+  onEdit(row: any): void {
+    console.log(row);
+  }
+
+  // Cancellazione di un dato
+  onDelete(row: any): void {
+    console.log(row);
+  }
 }

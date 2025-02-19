@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { OrderBy, PaginationConfig, TableConfig } from './table-config.interface';
 import { NgFor, NgIf, } from '@angular/common';
 import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
@@ -6,6 +6,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PaginationPipe } from "../pagination.pipe";
 import {FormsModule} from  '@angular/forms';
+//import { EventEmitter } from 'stream';
 
 @Component({
   selector: 'app-table',
@@ -17,11 +18,32 @@ import {FormsModule} from  '@angular/forms';
 export class TableComponent implements OnInit{
     @Input() config: TableConfig | undefined; 
     @Input() data: any[] = []; 
+    @Input() actionsConfig: {create?: boolean; edit?: boolean; delete?: boolean} = {
+      create: true,
+      edit: true,
+      delete: true
+    }
+
+    @Output() create = new EventEmitter<void>();
+    @Output() edit = new EventEmitter<void>();
+    @Output() delete = new EventEmitter<void>();
+
+    onCreate(): void{
+      this.create.emit();
+    }
+
+    onEdit(row: any): void{
+      this.edit.emit(row);
+    }
+
+    onDelete(row: any): void{
+      this.delete.emit(row);
+    }
 
     currentOrderby: OrderBy | undefined;
     currentPagination: PaginationConfig = {itemsPerPage: 10, currentPage: 1};
     currentPage: number = 1;
-    filter: {[key: string]: string} = {} // Oggetto per tenere salvati i filtri 
+    filter: {[key: string]: string} = {} // Oggetto per tenere salvati i filtr
 
     // Imposto l'ordinamento di default
     ngOnInit(): void {
@@ -116,5 +138,35 @@ export class TableComponent implements OnInit{
     getPage(): number[]{
       const numberPage = this.getNumberPage();
       return Array.from({length: numberPage}, (_, i) => i + 1);
-      }    
+      }
+      
+
+    /*
+    onEdit(row: any): void{
+     
+      row.nome = prompt('Modifica Nome:', row.nome) || row.nome;
+      row.età = Number(prompt('Modifica Età:', row.età)) || row.età;
+      row.dataNascita = prompt('Modifica Data di Nascita (YYYY-MM-DD):', row.dataNascita) || row.dataNascita;
+    
+      row.editable = !row.editable; 
+    }
+     
+    onCreate():void{
+      const newRow = {
+        id: this.data.length + 1,
+        nome: 'Nuovo utente ',
+        età: 0,
+        dataNascita: null,
+      };
+      this.data.push(newRow)
+      this.currentPage = 1;
+    }
+
+    onDelete(row: any): void{
+      const index = this.data.indexOf(row);
+      if(index !== -1){
+        this.data.splice(index,1);
+      }
+    }
+    */
   }
