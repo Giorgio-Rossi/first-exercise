@@ -1,0 +1,19 @@
+<table>
+    <thead>
+      <tr>
+        <th *ngFor="let column of config?.headers" (click)="onOrder(column.key)">
+          {{ column.columnName }}
+          <fa-icon *ngIf="column.ordinable"
+          [icon]="getIconOrderedBy(column.key)"
+          class="sort-icon"></fa-icon>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let riga of data">
+        <td *ngFor="let column of config?.headers">
+          {{ riga[column.key] }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
