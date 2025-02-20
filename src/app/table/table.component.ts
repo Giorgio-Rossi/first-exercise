@@ -1,16 +1,18 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { OrderBy, PaginationConfig, TableConfig } from './table-config.interface';
+import { actionsConfig, OrderBy, PaginationConfig, TableConfig } from './table-config.interface';
 import { NgFor, NgIf, } from '@angular/common';
 import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PaginationPipe } from "../pagination.pipe";
 import {FormsModule} from  '@angular/forms';
+import { ButtonComponent } from "../button/button.component";
+import { ButtonConfig } from '../button/button-config.interface';
 //import { EventEmitter } from 'stream';
 
 @Component({
   selector: 'app-table',
-  imports: [NgFor, NgIf, FontAwesomeModule, PaginationPipe, FormsModule],
+  imports: [NgFor, NgIf, FontAwesomeModule, PaginationPipe, FormsModule, ButtonComponent],
   templateUrl: './table.component.html',
   styleUrl: './table.component.css'
 })
@@ -18,26 +20,14 @@ import {FormsModule} from  '@angular/forms';
 export class TableComponent implements OnInit{
     @Input() config: TableConfig | undefined; 
     @Input() data: any[] = []; 
-    @Input() actionsConfig: {create?: boolean; edit?: boolean; delete?: boolean} = {
-      create: true,
-      edit: true,
-      delete: true
-    }
+    @Input() actions?: actionsConfig[];
 
-    @Output() create = new EventEmitter<void>();
-    @Output() edit = new EventEmitter<void>();
-    @Output() delete = new EventEmitter<void>();
 
-    onCreate(): void{
-      this.create.emit();
-    }
+    @Output() clickAction: EventEmitter<any> = new EventEmitter();
 
-    onEdit(row: any): void{
-      this.edit.emit(row);
-    }
-
-    onDelete(row: any): void{
-      this.delete.emit(row);
+    handleActionClick(action: any, data: any): void{
+      console.log('action:', action)
+      console.log('data:', data)
     }
 
     currentOrderby: OrderBy | undefined;
@@ -139,34 +129,4 @@ export class TableComponent implements OnInit{
       const numberPage = this.getNumberPage();
       return Array.from({length: numberPage}, (_, i) => i + 1);
       }
-      
-
-    /*
-    onEdit(row: any): void{
-     
-      row.nome = prompt('Modifica Nome:', row.nome) || row.nome;
-      row.età = Number(prompt('Modifica Età:', row.età)) || row.età;
-      row.dataNascita = prompt('Modifica Data di Nascita (YYYY-MM-DD):', row.dataNascita) || row.dataNascita;
-    
-      row.editable = !row.editable; 
-    }
-     
-    onCreate():void{
-      const newRow = {
-        id: this.data.length + 1,
-        nome: 'Nuovo utente ',
-        età: 0,
-        dataNascita: null,
-      };
-      this.data.push(newRow)
-      this.currentPage = 1;
-    }
-
-    onDelete(row: any): void{
-      const index = this.data.indexOf(row);
-      if(index !== -1){
-        this.data.splice(index,1);
-      }
-    }
-    */
   }

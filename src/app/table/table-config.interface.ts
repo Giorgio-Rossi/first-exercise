@@ -24,7 +24,5 @@ export interface PaginationConfig{
 }
 
 export interface actionsConfig{
-    create?: boolean;
-    edit?: boolean;
-    delete?: boolean;
+  actions: string[];
 }

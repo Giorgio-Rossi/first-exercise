@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { ButtonConfig } from './button-config.interface';
+import { Component, Input, Output } from '@angular/core';
+import { EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-button',
@@ -7,14 +7,11 @@ import { ButtonConfig } from './button-config.interface';
   styleUrls: ['./button.component.css']
 })
 export class ButtonComponent {
-  @Input() config: ButtonConfig = {
-    label: 'Button', // Valore predefinito
-    type: 'button', // Valore predefinito
-    disabled: false, // Valore predefinito
-    style: {
-      color: 'black',
-      backgroundColor: 'white',
-      border: '1px solid black'
-    }
-  };
+  @Input() config?: any; 
+
+  @Output() onClick=new EventEmitter<any>();
+
+  handleClick(){
+    this.onClick.emit(this.config?.actions);
+  }
 }

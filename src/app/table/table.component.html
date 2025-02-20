@@ -1,6 +1,3 @@
-
-<button *ngIf="actionsConfig.create" (click)="onCreate()">Aggiungi</button>
-
 <table>
     <thead>
       <tr>
@@ -19,7 +16,7 @@
             placeholder="Filtra {{ column.columnName }}"
           />
         </th>
-        <th *ngIf="actionsConfig.edit || actionsConfig.delete">Azioni</th>
+        <th *ngIf="config?.actions?.actions?.length">Azioni</th>
       </tr>
     </thead>
 
@@ -28,12 +25,13 @@
         <td *ngFor="let column of config?.headers">
           {{ riga[column.key] }}
         </td>
-        <td *ngIf="actionsConfig.edit || actionsConfig.delete">
-          <button *ngIf="actionsConfig.edit" (click)="onEdit(riga)">Modifica</button>
-          <button *ngIf="actionsConfig.delete" (click)="onDelete(riga)">Elimina</button>
-      </tr>
+        <td *ngIf="config?.actions?.actions?.length">
+          <button *ngFor="let action of config?.actions?.actions" (click)="handleActionClick(action, riga)">
+            {{ action }}
+          </button>
     </tbody>
 </table>
+
 
   <!--- Sezione paginazione -->
   <div class="pagination">
@@ -43,3 +41,5 @@
     </span>
     <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === getNumberPage()">Successivo</button>
   </div>
+  
+

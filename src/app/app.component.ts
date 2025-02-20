@@ -1,21 +1,55 @@
 import { Component } from '@angular/core';
 import { ButtonConfig } from './button/button-config.interface';
-import { ButtonComponent } from "./button/button.component";
 import { TableConfig, actionsConfig } from './table/table-config.interface';
 import { TableComponent } from "./table/table.component";
 import { FormsModule } from '@angular/forms';
 
 
-
 @Component({
   selector: 'app-root',
-  imports: [TableComponent, ButtonComponent, FormsModule, ],
+  imports: [TableComponent, FormsModule],
   templateUrl: './app.component.html'
 })
 
 export class AppComponent {
     title = 'First exercise'
     filter: { [key: string]: string } = {}; // Oggetto per i filtri
+    
+
+    action: string[] = ['CREATE', 'EDIT', 'DELETE'];
+
+    actions: ButtonConfig[] = [
+        {
+          label: 'CREATE',
+          type: 'button',
+          disabled: false,
+          style: {
+            color: 'white',
+            backgroundColor: 'green',
+            border: 'none'
+          }
+        },
+        {
+          label: 'EDIT',
+          type: 'button',
+          disabled: false,
+          style: {
+            color: 'white',
+            backgroundColor: 'blue',
+            border: 'none'
+          }
+        },
+        {
+          label: 'DELETE',
+          type: 'button',
+          disabled: false,
+          style: {
+            color: 'white',
+            backgroundColor: 'red',
+            border: 'none'
+          }
+        }
+      ];
 
     buttonConfig: ButtonConfig = {
       label: 'Click',
@@ -29,11 +63,6 @@ export class AppComponent {
     };
 
     tableConfig: TableConfig = {
-      actions: {
-        create: true,
-        edit: true,
-        delete: true
-      },
       headers: [
         { key: 'id', columnName: 'ID', type: 'Number', ordinable: true, filtrable: true},
         { key: 'nome', columnName: 'Nome', type: 'String', ordinable: true,  filtrable: true},
@@ -42,7 +71,7 @@ export class AppComponent {
       ],
       currentByDefault: {key: 'id', orderby: 'asc'}, // setto l'ordinamento di default
       pagination:{itemsPerPage: 10, currentPage: 1},
-  
+      actions: { actions: ['EDIT', 'DELETE'] }
     };
 
 
@@ -98,21 +127,6 @@ export class AppComponent {
       { id: 49, nome: 'Leonardo Viola', eta: 36, dataNascita: '1987-08-11', ordinable: true },
       { id: 50, nome: 'Rita Neri', eta: 27, dataNascita: '1996-03-05', ordinable: false }
     ];
+  
     
-
-
-  // Creazione di un nuovo dato
-  onCreate(): void {
-    console.log("Operazione di create ricevuta");
-  }
-
-  // Modifica di un dato esistente
-  onEdit(row: any): void {
-    console.log(row);
-  }
-
-  // Cancellazione di un dato
-  onDelete(row: any): void {
-    console.log(row);
-  }
 }
